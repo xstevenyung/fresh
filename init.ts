@@ -76,6 +76,7 @@ const useTwind = flags.twind === null
   ? confirm(USE_TWIND_MESSAGE)
   : flags.twind;
 
+await Deno.mkdir(join(directory, ".vscode"), { recursive: true });
 await Deno.mkdir(join(directory, "routes", "api"), { recursive: true });
 await Deno.mkdir(join(directory, "islands"), { recursive: true });
 await Deno.mkdir(join(directory, "static"), { recursive: true });
@@ -337,6 +338,28 @@ This will watch the project directory and restart as necessary.
 await Deno.writeTextFile(
   join(directory, "README.md"),
   README_MD,
+);
+
+const vscodeSettings = {
+  "deno.enable": true,
+};
+
+const VSCODE_SETTINGS = JSON.stringify(vscodeSettings, null, 2) + "\n";
+
+await Deno.writeTextFile(
+  join(directory, ".vscode", "settings.json"),
+  VSCODE_SETTINGS
+);
+
+const vscodeExtensions = {
+  recommendations: ["denoland.vscode-deno"],
+};
+
+const VSCODE_EXTENSIONS = JSON.stringify(vscodeExtensions, null, 2) + "\n";
+
+await Deno.writeTextFile(
+  join(directory, ".vscode", "extensions.json"),
+  VSCODE_EXTENSIONS
 );
 
 const manifest = await collect(directory);
